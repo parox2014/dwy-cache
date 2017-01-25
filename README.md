@@ -19,19 +19,19 @@ $ npm install dwy-cache --save
 ```
 2. es2015
 
-```
+```js
   import {CacheList ,FIFOStrategy,LRUStrategy,LFUStrategy} from 'dwy-cache'
 ```
 
 3. cmd
 
-```
+```js
   var dwyCache=require('dwy-cache');
 ```
 
 ###使用
 
-```
+```js
 import {CacheList ,FIFOStrategy,LRUStrategy,LFUStrategy} from 'dwy-cache'
 
 var fifoStrategy=new FIFOStrategy();
