@@ -1,5 +1,5 @@
 # dwy-cache
-javascript data cache
+a javascript data cache plugin
 
 ###安装
 
@@ -33,12 +33,15 @@ $ npm install dwy-cache --save
 
 ```js
 import {CacheList ,FIFOStrategy,LRUStrategy,LFUStrategy} from 'dwy-cache'
+import {Http,URLSearchParams} from 'http'
+
 
 var fifoStrategy=new FIFOStrategy();
 var lruStrategy=new LRUStrategy();
 var lfuStrategy=new LFUStrategy();
 
-var cacheList=new dwyCache.CacheList({
+//创建缓存列表
+var cacheList=new CacheList({
   strategy:fifoStrategy,//缓存策略
   max:100,//最大缓存数目，当缓存超过此数，会根据淘汰策略删除缓存
   expire:3000//缓存过期时间,单位毫秒
@@ -49,28 +52,50 @@ var cacheList=new dwyCache.CacheList({
 cacheList.use(lruStrategy);
 cacheList.use(lfuStrategy);
 
+//将数据放入缓存列表
+cacheList.put('cacheName','data',3000);
+
+//根据名称取出缓存
+var cacheData=cacheList.get('cacheName');
+
+//清空缓存
+cacheList.clear();
+
+//获取缓存数目
+cacheList.getLength();
+```
+
+###示例
+
+```js
+import {CacheList ,LFUStrategy} from 'dwy-cache'
+import {Http,URLSearchParams} from 'http'
+
+
+var cacheList=new CacheList({
+  strategy:new LFUStrategy()
+});
+
 export class TodoService{
 
   static todoListURL='/todos';
   
   static query(params){
-    var defer=$.Deferred();
+
     var {todoListURL}=this;
-    var cacheName=todoListURL+'?'+$.param(params);
+    var cacheName=todoListURL+'?'+new URLSearchParams(params).toString();
     var data=cacheList.get(cacheName);
       
     if(data){
-      return defer.resolve(data);
+      return Promise.resolve(data);
     }
       
-    $.get(todoListURL,{data:params})
-      .done(function(resp){
+    return Http.get(todoListURL,{data:params})
+      .then(function(resp){
           
-        cacheList.put(cacheName,resp);
-        defer.resolve(resp);
+        cacheList.put(cacheName,resp.data);
+        return resp.data;
       });
-    
-    return defer;
   }
 }
 ```
