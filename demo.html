@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cache Demo</title>
+</head>
+<body>
+<div>
+  <button id="btn">
+    Get Cache
+  </button>
+</div>
+<script src="./dist/bundle.js">
+  
+</script>
+
+<script>
+  (function () {
+    var cacheList=new dwyCache.CacheList({expire:30000});
+    var fifoStrategy=new dwyCache.FIFOStrategy();
+    
+    cacheList.use(fifoStrategy);
+    
+    for(var i=0;i<20;i++){
+      cacheList.put('name'+i,'value'+i,30000+i);
+    }
+   
+    //renderCacheList(cacheList.dataStore);
+    
+    var lruStrategy=new dwyCache.LRUStrategy();
+    
+    cacheList.use(lruStrategy);
+    
+    var lastOne=cacheList.getLast();
+    var name12=cacheList.get('name12');
+    var newlastOne=cacheList.getLast();
+    var index=cacheList.getItemIndex(lastOne);
+  
+  
+   // renderCacheList(cacheList.dataStore);
+  
+  
+    var lfuStrategy=new dwyCache.LFUStrategy();
+    
+    cacheList.use(lfuStrategy);
+    
+    cacheList.get('name13');
+    cacheList.get('name13');
+    cacheList.get('name13');
+    setTimeout(function () {
+      cacheList.get('name12');
+      cacheList.get('name12');
+      cacheList.get('name12');
+  
+      renderCacheList(cacheList.dataStore);
+  
+    },1000);
+  
+    //renderCacheList(cacheList.dataStore);
+  
+    btn.addEventListener('click',function () {
+      
+      var cache=cacheList.get('name14');
+      console.log(cache);
+    });
+    
+    function renderCacheList(list) {
+      var ul=document.createElement('ul');
+      var frag=document.createDocumentFragment();
+      
+      list.forEach(function (item) {
+        var li=document.createElement('li');
+        li.innerHTML='name:'+
+          item.name+
+          ',value:'+
+          item.value+
+          ',frequency:'+
+          item.frequency+
+        ',usedAt:'+(new Date(item.usedAt)).toLocaleString();
+        
+        frag.appendChild(li);
+      });
+      
+      ul.appendChild(frag);
+      document.body.appendChild(ul);
+    }
+  })();
+</script>
+</body>
+</html>
