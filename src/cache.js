@@ -36,6 +36,12 @@ export class CacheModel {
     let {expire,usedAt}=this;
     return typeof expire==='number'? Date.now() - usedAt >= expire : false;
   }
+  
+  reset(){
+    this.createdAt = this.usedAt = Date.now();
+    this.frequency = 1;
+    return this;
+  }
 }
 
 export default class CacheList {
@@ -49,17 +55,31 @@ export default class CacheList {
   constructor(option) {
     let {max, strategy, expire}=option||{};
     this.max = max||10;
-    this.strategy = strategy;
+    this._strategy = strategy;
     this.expire = expire;
     this.dataStore = [];
   }
   
+  get strategy(){
+    
+    if(!this._strategy)throw new Error('must set strategy first.set strategy via cacheList.use(strategy)');
+    
+    return this._strategy;
+    
+  }
   /**
    * 使用指定缓存策略
    * @param strategy {*}
    */
   use(strategy) {
-    this.strategy = strategy;
+    
+    this._strategy = strategy;
+    
+    let {dataStore}=this;
+    
+    if(dataStore.length>0){
+      dataStore.forEach(item=>item.reset());
+    }
   }
   
   /**
@@ -70,7 +90,7 @@ export default class CacheList {
    */
   put(name, value, expire) {
     
-    //过期时间优先使用传入的时间，如果没有
+    //过期时间优先使用传入的时间
     let cache = new CacheModel(name, value, expire || this.expire);
     
     this.strategy.beforePut.call(this);
@@ -97,6 +117,25 @@ export default class CacheList {
     }
   }
   
+  /**
+   * 设置最大值
+   * @param newMax {Number}
+   */
+  setMax(newMax){
+    
+    if(typeof newMax!=='number')throw new Error('max should be number');
+    
+    let {max,dataStore}=this;
+    
+    this.max=newMax;
+    
+    if(dataStore.length<newMax)return;
+    
+    if(newMax<max){
+      this.dataStore.splice(0,max-newMax);
+    }
+    
+  }
   remove(cache) {
     let index = this.getItemIndex(cache);
     this.dataStore.splice(index, 1);

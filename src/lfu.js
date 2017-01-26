@@ -29,7 +29,7 @@ export default class LFUStrategy extends FIFOStrategy {
     cache.updateUsedTime();
     
     dataStore.sort((itemA, itemB) => {
-      
+     
       //首先按缓存的使用次数排序，
       //如果使用次数相同，则比较最近使用的时间
       //时间越近的排在后面

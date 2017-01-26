@@ -1,8 +1,8 @@
 {
   "name": "dwy-cache",
-  "version": "1.0.0",
-  "description": "a javascript cache",
-  "main": "dist/bundle.js",
+  "version": "1.0.2",
+  "description": "a javascript data cache plugin",
+  "main": "dist/dwy-cache.js",
   "scripts": {
     "test": "mocha",
     "build": "webpack"

@@ -1,10 +1,11 @@
 var path=require('path');
+var webpack=require('webpack');
 
 module.exports={
   entry:'./src/index.js',
   output:{
     path:path.join(__dirname,'./dist/'),
-    filename:'bundle.js',
+    filename:'dwy-cache.js',
     // 组件采用UMD格式打包
     libraryTarget: 'umd',
     // 组件名称
@@ -18,5 +19,12 @@ module.exports={
         exclude: /node_modules/
       }
     ]
-  }
+  },
+  plugins:[
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  ]
 };

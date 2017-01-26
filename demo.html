@@ -10,7 +10,7 @@
     Get Cache
   </button>
 </div>
-<script src="./dist/bundle.js">
+<script src="./dist/dwy-cache.js">
   
 </script>
 
@@ -39,7 +39,6 @@
   
    // renderCacheList(cacheList.dataStore);
   
-  
     var lfuStrategy=new dwyCache.LFUStrategy();
     
     cacheList.use(lfuStrategy);
@@ -47,15 +46,7 @@
     cacheList.get('name13');
     cacheList.get('name13');
     cacheList.get('name13');
-    setTimeout(function () {
-      cacheList.get('name12');
-      cacheList.get('name12');
-      cacheList.get('name12');
-  
-      renderCacheList(cacheList.dataStore);
-  
-    },1000);
-  
+    
     //renderCacheList(cacheList.dataStore);
   
     btn.addEventListener('click',function () {
@@ -63,6 +54,8 @@
       var cache=cacheList.get('name14');
       console.log(cache);
     });
+    
+    cacheList.setMax(7);
     
     function renderCacheList(list) {
       var ul=document.createElement('ul');
