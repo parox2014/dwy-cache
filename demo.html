@@ -15,8 +15,7 @@
 </script>
 
 <script>
-  (function () {
-    var cacheList=new dwyCache.CacheList({expire:30000});
+ var cacheList=new dwyCache.CacheList({expire:30000});
     var fifoStrategy=new dwyCache.FIFOStrategy();
     
     cacheList.use(fifoStrategy);
@@ -77,7 +76,6 @@
       ul.appendChild(frag);
       document.body.appendChild(ul);
     }
-  })();
 </script>
 </body>
 </html>

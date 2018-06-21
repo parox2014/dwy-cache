@@ -1,3 +1,4 @@
+var window={};
 var dwyCache=require('../dist/dwy-cache');
 var assert=require('assert');
 
@@ -26,7 +27,7 @@ describe('Cache',function () {
           cacheList.put('name'+i,'value'+i);
         }
       
-        assert.equal(cacheList.getLength(),cacheList.max);
+        assert.equal(cacheList.length,cacheList.max);
       });
     });
   
@@ -61,7 +62,7 @@ describe('Cache',function () {
           cacheList.put('name'+i,'value'+i);
         }
       
-        assert.equal(cacheList.getLength(),cacheList.max);
+        assert.equal(cacheList.length,cacheList.max);
       });
     });
     
@@ -69,10 +70,9 @@ describe('Cache',function () {
       it('get item name12,the item should move to end,so the last item\'s value should eq value12',function () {
         
         var name12=cacheList.get('name12');
-        var lastOne=cacheList.getLast();
         
         assert.strictEqual(name12,'value12');
-        assert.strictEqual(lastOne.value,name12);
+        assert.strictEqual(cacheList.last,name12);
         
       });
     })
@@ -97,39 +97,33 @@ describe('Cache',function () {
           cacheList.put('name'+i,'value'+i);
         }
       
-        assert.equal(cacheList.getLength(),cacheList.max);
+        assert.equal(cacheList.length,cacheList.max);
       });
     });
     
     describe('LFU#get',function () {
       it('get item name12 5 times,the item12 should move to end,so the last item\'s value should eq value12',function () {
         
-        var firstOne=cacheList.getFirst();
+   
+        assert.strictEqual(cacheList.first,'value19');
         
-        assert.strictEqual(firstOne.value,'value19');
-        
-        var i=1;
+   
+        cacheList.get('name12');
+  
         
         cacheList.get('name12');
-        i++;
-        
+
         cacheList.get('name12');
-        i++;
-        
+  
         cacheList.get('name12');
-        i++;
-        
-        cacheList.get('name12');
-        i++;
-        
+
+    
         var item12=cacheList.get('name12');
-        i++;
-        
-        var lastOne=cacheList.getLast();
-        
+    
+      
         assert.strictEqual(item12,'value12');
-        assert.strictEqual(lastOne.value,item12);
-        assert.strictEqual(lastOne.frequency,i);
+        assert.strictEqual(cacheList.last,item12);
+
       });
     })
   });
@@ -138,11 +132,11 @@ describe('Cache',function () {
     
     it('setMax(8),cacheList length should eq 8',function () {
       
-      assert.strictEqual(cacheList.getLength(),10);
+      assert.strictEqual(cacheList.length,10);
       
       cacheList.setMax(8);
 
-      assert.strictEqual(cacheList.getLength(),8);
+      assert.strictEqual(cacheList.length,8);
       
     });
     
@@ -162,7 +156,7 @@ describe('Cache',function () {
       
       cacheList.clear();
       
-      assert.deepEqual(cacheList.getLength(),0);
+      assert.deepEqual(cacheList.length,0);
       
     });
     

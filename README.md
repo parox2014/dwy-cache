@@ -1,20 +1,24 @@
 # dwy-cache
+
 a javascript data cache plugin
 
 插件已经实现了三种缓存过期策略，可以根据项目需求选用合适的策略
 
-##### FIFO：First In First Out，先进先出
-##### LRU：Least Recently Used，最近最少使用
-##### LFU：Least Frequently Used，最不经常使用
+* FIFO：First In First Out，先进先出
+* LRU：Least Recently Used，最近最少使用
+* LFU：Least Frequently Used，最不经常使用
 
-###安装
+## 安装
 
+```cmd
+npm install dwy-cache --save
+#or
+yarn add dwy-cache
 ```
-$ npm install dwy-cache --save
-```
-###引入
 
-##### script
+## 引入
+
+### script
 
 ```html
 <script src="../node_modules/dwy-cache/dist/dwy-cache.js"></script>
@@ -23,21 +27,20 @@ $ npm install dwy-cache --save
 //CacheList/FIFOStrategy/LRUStrategy/LFUStrategy等成员
 ```
 
-##### es2015
+### es2015
 
 ```js
   import {CacheList ,FIFOStrategy,LRUStrategy,LFUStrategy} from 'dwy-cache'
 ```
 
-##### cmd
+### cmd
 
 ```js
   var dwyCache=require('dwy-cache');
 ```
 
-###使用
+## 使用
 
-####
 ```js
 import {CacheList ,FIFOStrategy,LRUStrategy,LFUStrategy} from 'dwy-cache'
 
@@ -82,7 +85,7 @@ cacheList.clear();
 cacheList.getLength();
 ```
 
-###示例
+## 示例
 
 ```js
 import {CacheList ,LFUStrategy} from 'dwy-cache'
@@ -103,14 +106,13 @@ export class TodoService{
     var {todoListURL}=this;
     var cacheName=todoListURL+'?'+new URLSearchParams(params).toString();
     var data=cacheList.get(cacheName);
-      
+
     if(data){
       return Promise.resolve(data);
     }
-      
+
     return Http.get(todoListURL,{data:params})
       .then(function(resp){
-          
         cacheList.put(cacheName,resp.data);
         return resp.data;
       });
@@ -120,6 +122,8 @@ export class TodoService{
 
 ### 测试
 
-```
-$ npm test
+```cmd
+yarn test
+#or
+npm test
 ```

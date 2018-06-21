@@ -1,9 +1,9 @@
-import FIFOStrategy from './fifo'
+import {FIFOStrategy} from './fifo'
 
 /**
  *
  */
-export default class LFUStrategy extends FIFOStrategy {
+export class LFUStrategy extends FIFOStrategy {
   
   /**
    * 将缓存数据放入数据

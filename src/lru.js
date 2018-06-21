@@ -1,6 +1,6 @@
-import FIFOStrategy from './fifo'
+import {FIFOStrategy} from './fifo'
 
-export default class LRUStrategy extends FIFOStrategy{
+export class LRUStrategy extends FIFOStrategy{
   
   /**
    * 缓存命中后执行的操作

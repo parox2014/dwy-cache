@@ -1,4 +1,6 @@
-export default class FIFOStrategy{
+import { Strategy } from "./strategy";
+
+export class FIFOStrategy extends Strategy{
   
   /**
    * 将缓存数据存入数组

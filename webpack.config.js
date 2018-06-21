@@ -9,22 +9,20 @@ module.exports={
     // 组件采用UMD格式打包
     libraryTarget: 'umd',
     // 组件名称
-    library: 'dwyCache'
+    library: 'dwyCache',
+    globalObject:'typeof self !== \'undefined\' ? self : this'
   },
+  mode:'production',
   module:{
-    loaders:[
+    rules:[
       {
         test:/\.js$/,
-        loader:'babel',
+        loader:'babel-loader',
         exclude: /node_modules/
       }
     ]
   },
-  plugins:[
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    })
-  ]
+  optimization:{
+    minimize:true
+  }
 };
